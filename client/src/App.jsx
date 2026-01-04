@@ -1,9 +1,8 @@
-// client/src/App.jsx
 import { useState } from "react";
 import "./App.css";
 
 function App() {
-  const [city, setCity] = useState("London");
+  const [city, setCity] = useState("Lahore");
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -20,8 +19,8 @@ function App() {
   };
 
   return (
-    <div className="App" style={{ padding: "2rem", fontFamily: "Arial" }}>
-      <h1>Weather App</h1>
+    <div style={{ padding: "2rem", fontFamily: "Arial" }}>
+      <h1>Weather Checker</h1>
       <input
         type="text"
         value={city}
@@ -40,6 +39,9 @@ function App() {
           <h2>{weather.city}</h2>
           <p>Temperature: {weather.temp} °C</p>
           <p>Condition: {weather.weather}</p>
+          {weather.icon && (
+            <img src={weather.icon} alt={weather.weather} style={{ width: "80px" }} />
+          )}
         </div>
       )}
 
