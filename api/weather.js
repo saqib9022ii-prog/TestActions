@@ -1,5 +1,3 @@
-
-
 export default async function handler(req, res) {
   const { city } = req.query;
   const API_KEY = process.env.OPENWEATHER_API_KEY;
@@ -21,6 +19,7 @@ export default async function handler(req, res) {
       icon: `http://openweathermap.org/img/wn/${data.weather[0].icon}.png`,
     });
   } catch (err) {
+    console.error("Weather API error:", err);
     res.status(500).json({ error: "Failed to fetch weather" });
   }
 }
