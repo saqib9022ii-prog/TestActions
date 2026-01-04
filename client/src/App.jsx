@@ -1,35 +1,51 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// client/src/App.jsx
+import { useState } from "react";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [city, setCity] = useState("London");
+  const [weather, setWeather] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const getWeather = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`http://localhost:5000/api/weather/${city}`);
+      const data = await res.json();
+      setWeather(data);
+    } catch (err) {
+      setWeather({ error: "Failed to fetch weather" });
+    }
+    setLoading(false);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="App" style={{ padding: "2rem", fontFamily: "Arial" }}>
+      <h1>Weather App</h1>
+      <input
+        type="text"
+        value={city}
+        onChange={(e) => setCity(e.target.value)}
+        placeholder="Enter city"
+        style={{ padding: "0.5rem", marginRight: "1rem" }}
+      />
+      <button onClick={getWeather} style={{ padding: "0.5rem 1rem" }}>
+        Get Weather
+      </button>
+
+      {loading && <p>Loading...</p>}
+
+      {weather && !weather.error && (
+        <div style={{ marginTop: "1rem" }}>
+          <h2>{weather.city}</h2>
+          <p>Temperature: {weather.temp} °C</p>
+          <p>Condition: {weather.weather}</p>
+        </div>
+      )}
+
+      {weather && weather.error && <p>{weather.error}</p>}
+    </div>
+  );
 }
 
-export default App
+export default App;
